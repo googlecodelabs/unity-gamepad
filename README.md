@@ -9,7 +9,7 @@ Pre-requisites
 
 Getting Started
 ---------------
-Open the `final/` directory in Android Studio to see the final product.
+Open the `final/` directory in Unity to see the final product.
 Visit the Google codelabs site to follow along the guided steps.
 
 Acknowledgements
