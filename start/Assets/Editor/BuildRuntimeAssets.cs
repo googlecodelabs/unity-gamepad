@@ -20,19 +20,32 @@ using UnityEngine;
 
 public class BuildRuntimeAssets
 {
+    private const string streamingName = "StreamingAssets";
+    private const string assetPacksName = "AssetPacks";
+    private const string astcSuffix = "#tcf_astc";
+
     [MenuItem("Assets/Build PAD Demo Runtime Assets Streaming")]
     static void BuildRTAssets_Streaming()
     {
-        string targetDirectory = "StreamingAssets";
-        BuildAssetBundles(targetDirectory);
+        // Clean out any old data
+        DeleteTargetDirectory(streamingName);
+        // Build the asset bundles
+        BuildAssetBundles(streamingName, "", MobileTextureSubtarget.Generic);
         // Copy our discrete test image asset
-        CopyDiscreteAsset("Discrete1.jpg", "Images", targetDirectory);
+        CopyDiscreteAsset("Discrete1.jpg", "Images", streamingName);
         AssetDatabase.Refresh();
     }
 
-    static void BuildAssetBundles(string targetDirectory)
+    static void BuildAssetBundles(string targetDirectory, string directorySuffix, 
+        MobileTextureSubtarget compressionFormat)
     {
         EnsureTargetDirectoryExists(targetDirectory);
+        EditorUserBuildSettings.androidBuildSubtarget = compressionFormat;
+        if (!EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, 
+            BuildTarget.Android))
+        {
+            Debug.Log("Failed to switch build target");
+        }
 
         // Build the AssetBundles
         string targetPath = Path.Combine(Application.dataPath, targetDirectory);
@@ -40,6 +53,33 @@ public class BuildRuntimeAssets
             BuildAssetBundleOptions.UncompressedAssetBundle, 
             BuildTarget.Android);
 
+        // We don't want to include a format suffix in the actual asset
+        // bundle name, so we build without the suffix and then
+        // rename the output directory to have the suffix
+        if (!string.IsNullOrEmpty(directorySuffix))
+        {
+            string renamedBundlesDirectory = targetDirectory + directorySuffix;
+            DeleteTargetDirectory(renamedBundlesDirectory);
+            string renamedPath = Path.Combine(Application.dataPath, renamedBundlesDirectory);
+            Directory.Move(targetPath, renamedPath);
+        }
+    }
+
+    static void DeleteTargetDirectory(string targetDirectory)
+    {
+        if (!string.IsNullOrEmpty(targetDirectory))
+        {
+            string targetPath = Path.Combine(Application.dataPath, targetDirectory);
+            if (Directory.Exists(targetPath))
+            {
+                string assetsPath = "Assets" + Path.DirectorySeparatorChar + 
+                    targetDirectory;
+                if (!AssetDatabase.DeleteAsset(assetsPath))
+                {
+                    Debug.Log("Failed to delete: " + assetsPath);
+                }
+            }
+        }
     }
 
     static void EnsureTargetDirectoryExists(string targetDirectory)

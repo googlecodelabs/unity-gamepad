@@ -36,12 +36,6 @@ public class LoadingSceneTransition : MonoBehaviour
         SceneManager.LoadScene(sceneToLoad);
     }
 
-#if UNITY_EDITOR
-    private void Start()
-    {
-            LoadNextScene();
-    }
-#else
     private enum LoadingSceneState
     {
         LOADING_STARTUP,
@@ -117,12 +111,12 @@ public class LoadingSceneTransition : MonoBehaviour
 
     private void StartLoadingAssetBundlesFromStreaming()
     {
-        List<string> assetBundleNameList = 
+        var assetBundleNameList = 
             gameAssetManager.GetAssetBundleNameList();
         currentItemsLoaded = 0;
         totalItemsToLoad = assetBundleNameList.Count;
 
-        Queue<string> assetBundleQueue = new Queue<string>(assetBundleNameList);
+        var assetBundleQueue = new Queue<string>(assetBundleNameList);
         StartCoroutine(LoadAssetBundlesFromStreaming(assetBundleQueue));
     }
 
@@ -132,13 +126,13 @@ public class LoadingSceneTransition : MonoBehaviour
         currentItemsLoaded = 0;
 
         // Collect the asset names from the asset bundles and queue for load
-        Dictionary<string, AssetBundle> assetBundlesDictionary = 
+        var assetBundlesDictionary = 
             gameAssetManager.AssetBundles;
         var assetBundles = assetBundlesDictionary.Values;
 
         foreach(AssetBundle assetBundle in assetBundles)
         {
-           string[] bundleAssets = assetBundle.GetAllAssetNames();
+           var bundleAssets = assetBundle.GetAllAssetNames();
            foreach(string bundleAsset in bundleAssets)
            {
                 string logString = string.Format("Loading {0} from bundle {1}",
@@ -158,7 +152,7 @@ public class LoadingSceneTransition : MonoBehaviour
     private void SetupDiscreteAssetsStreaming()
     {
         // Get the list of discrete streaming assets and queue for load
-        List<string> discreteAssets = 
+        var discreteAssets = 
             gameAssetManager.GetDiscreteAssetNameList();
         foreach(string discreteAsset in discreteAssets)
         {
@@ -304,7 +298,7 @@ public class LoadingSceneTransition : MonoBehaviour
     {
         currentItemsLoaded = 0;
         totalItemsToLoad = 0;
-        Queue<string> assetBundleQueue = new Queue<string>();
+        var assetBundleQueue = new Queue<string>();
 
         // Always add fast-follow packs, if they are still in the process
         // of being downloaded our request will wait until they finish
@@ -410,7 +404,7 @@ public class LoadingSceneTransition : MonoBehaviour
                 // Get the list of discrete streaming assets, 
                 // retrieve their location from the asset pack
                 // and queue for load
-                List<string> discreteAssets = 
+                var discreteAssets = 
                     gameAssetManager.GetDiscreteAssetNameList();
                 foreach(string discreteAsset in discreteAssets)
                 {
@@ -437,5 +431,4 @@ public class LoadingSceneTransition : MonoBehaviour
                 assetPackName, packRequest.Error);
         }
     }
-#endif // !UNITY_EDITOR
 }

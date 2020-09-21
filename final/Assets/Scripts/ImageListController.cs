@@ -22,6 +22,7 @@ using UnityEditor;
 
 public class ImageListController : MonoBehaviour
 {
+    public Text demoText;
     public Image currentImage;
     public GameObject imageButtonPrefab;
     public GameObject imageListContent;
@@ -93,7 +94,7 @@ public class ImageListController : MonoBehaviour
     #else
     private void RefreshImageList()
     {
-        Dictionary<string, Sprite> allSprites = gameAssetManager.SpriteAssets;
+        var allSprites = gameAssetManager.SpriteAssets;
         foreach(var dictionaryEntry in allSprites)
         {
             string assetPath = dictionaryEntry.Key;
@@ -114,7 +115,7 @@ public class ImageListController : MonoBehaviour
         GameObject newButton = Instantiate(imageButtonPrefab) as GameObject;
         ImageButtonController buttonController = 
             newButton.GetComponent<ImageButtonController>();
-        buttonController.SetupButton(assetPath, newSprite, currentImage);
+        buttonController.SetupButton(assetPath, newSprite, currentImage, demoText);
         newButton.transform.SetParent(imageListContent.transform, false);
         newButton.transform.localScale = Vector3.one;
     }

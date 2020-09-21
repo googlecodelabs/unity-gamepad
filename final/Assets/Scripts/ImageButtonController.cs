@@ -25,6 +25,8 @@ public class ImageButtonController : MonoBehaviour
 
     // Reference to the image to update when a button is selected
     private Image currentImage;
+    // Reference to the demo title text
+    private Text demoText;
 
     private void Start()
     {
@@ -37,10 +39,11 @@ public class ImageButtonController : MonoBehaviour
     }
 
     public void SetupButton(string assetPath, Sprite newSprite,
-        Image currentImageRef)
+        Image currentImageRef, Text demoTextRef)
     {
         buttonImage.sprite = newSprite;
         currentImage = currentImageRef;
+        demoText = demoTextRef;
 
         // Trim the path and just use the asset name for the button text
         buttonText.text = Path.GetFileName(assetPath);
@@ -49,5 +52,33 @@ public class ImageButtonController : MonoBehaviour
     public void ImageButtonOnClick()
     {
         currentImage.sprite = buttonImage.sprite;
+
+        string fmtText = "";
+        TextureFormat fmt = buttonImage.sprite.texture.format;
+        if (fmt == TextureFormat.ETC2_RGB ||
+            fmt == TextureFormat.ETC2_RGBA1 ||
+            fmt == TextureFormat.ETC2_RGBA8)
+        {
+            fmtText = "ETC2";
+        }
+        else if (fmt == TextureFormat.ASTC_RGB_4x4 ||
+            fmt == TextureFormat.ASTC_RGB_4x4 ||
+            fmt == TextureFormat.ASTC_RGB_5x5 ||
+            fmt == TextureFormat.ASTC_RGB_6x6 ||
+            fmt == TextureFormat.ASTC_RGB_8x8 ||
+            fmt == TextureFormat.ASTC_RGB_10x10 ||
+            fmt == TextureFormat.ASTC_RGB_12x12 ||
+            fmt == TextureFormat.ASTC_RGBA_4x4 ||
+            fmt == TextureFormat.ASTC_RGBA_4x4 ||
+            fmt == TextureFormat.ASTC_RGBA_5x5 ||
+            fmt == TextureFormat.ASTC_RGBA_6x6 ||
+            fmt == TextureFormat.ASTC_RGBA_8x8 ||
+            fmt == TextureFormat.ASTC_RGBA_10x10 ||
+            fmt == TextureFormat.ASTC_RGBA_12x12)
+        {
+            fmtText = "ASTC";
+        }
+        demoText.text = string.Format("Unity Play Asset Delivery Demo {0}",
+            fmtText);
     }
 }

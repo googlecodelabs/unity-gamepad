@@ -60,7 +60,7 @@ public class GameAssetManager : MonoBehaviour
 
     public List<string> GetAssetPackNameList()
     {
-        List<string> assetPacks = installtimeAssetPackNameList.Concat(
+        var assetPacks = installtimeAssetPackNameList.Concat(
             fastfollowAssetPackNameList).Concat(
                 ondemandAssetPackNameList).ToList();
         return assetPacks;

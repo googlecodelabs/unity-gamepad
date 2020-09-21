@@ -113,12 +113,12 @@ public class LoadingSceneTransition : MonoBehaviour
 
     private void StartLoadingAssetBundlesFromStreaming()
     {
-        List<string> assetBundleNameList = 
+        var assetBundleNameList = 
             gameAssetManager.GetAssetBundleNameList();
         currentItemsLoaded = 0;
         totalItemsToLoad = assetBundleNameList.Count;
 
-        Queue<string> assetBundleQueue = new Queue<string>(assetBundleNameList);
+        var assetBundleQueue = new Queue<string>(assetBundleNameList);
         StartCoroutine(LoadAssetBundlesFromStreaming(assetBundleQueue));
     }
 
@@ -128,13 +128,13 @@ public class LoadingSceneTransition : MonoBehaviour
         currentItemsLoaded = 0;
 
         // Collect the asset names from the asset bundles and queue for load
-        Dictionary<string, AssetBundle> assetBundlesDictionary = 
+        var assetBundlesDictionary = 
             gameAssetManager.AssetBundles;
         var assetBundles = assetBundlesDictionary.Values;
 
         foreach(AssetBundle assetBundle in assetBundles)
         {
-           string[] bundleAssets = assetBundle.GetAllAssetNames();
+           var bundleAssets = assetBundle.GetAllAssetNames();
            foreach(string bundleAsset in bundleAssets)
            {
                 string logString = string.Format("Loading {0} from bundle {1}",
@@ -154,7 +154,7 @@ public class LoadingSceneTransition : MonoBehaviour
     private void SetupDiscreteAssetsStreaming()
     {
         // Get the list of discrete streaming assets and queue for load
-        List<string> discreteAssets = 
+        var discreteAssets = 
             gameAssetManager.GetDiscreteAssetNameList();
         foreach(string discreteAsset in discreteAssets)
         {

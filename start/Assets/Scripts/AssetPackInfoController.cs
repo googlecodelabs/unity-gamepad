@@ -188,8 +188,8 @@ public class AssetPackInfoController : MonoBehaviour
 
     IEnumerator LoadAssetsFromBundle(AssetBundle assetBundle)
     {
-        string[] bundleAssets = assetBundle.GetAllAssetNames();
-        Queue<string> assetQueue = new Queue<string>(bundleAssets);
+        var bundleAssets = assetBundle.GetAllAssetNames();
+        var assetQueue = new Queue<string>(bundleAssets);
         while (assetQueue.Count > 0)
         {
             string assetName = assetQueue.Dequeue();

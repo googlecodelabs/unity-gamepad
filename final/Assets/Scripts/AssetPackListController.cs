@@ -20,26 +20,21 @@ public class AssetPackListController : MonoBehaviour
 {
     public GameObject assetPackInfoPrefab;
     public GameObject assetPackListContent;
-
-#if !UNITY_EDITOR
     private GameAssetManager gameAssetManager;
 
     private void Awake()
     {
-        #if !UNITY_EDITOR
         gameAssetManager = 
             GameObject.Find("GameAssetManager").GetComponent<GameAssetManager>();
         if (gameAssetManager == null) 
         {
             Debug.LogError("Failed to find GameAssetManager");
         }
-        #endif
     }
 
     private void Start()
     {
-        // FINAL
-        List<string> assetPackNames = 
+        var assetPackNames = 
             gameAssetManager.GetAssetPackNameList();
 
         foreach(string assetPackName in assetPackNames)
@@ -47,7 +42,6 @@ public class AssetPackListController : MonoBehaviour
             AddAssetPack(assetPackName);
         }
 
-        // FINAL2
         AddAssetPack(gameAssetManager.discreteAssetPackName);
     }
 
@@ -69,5 +63,4 @@ public class AssetPackListController : MonoBehaviour
             false);
         infoController.transform.localScale = Vector3.one;
     }
-#endif
 }

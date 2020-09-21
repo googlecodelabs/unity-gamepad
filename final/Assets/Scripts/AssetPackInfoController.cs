@@ -28,7 +28,6 @@ public class AssetPackInfoController : MonoBehaviour
     public Button assetPackDownloadButton;
     public ProgressBar assetPackProgressBar;
     
-#if !UNITY_EDITOR
     private enum AssetPackInfoStatus
     {
         PACKSTATUS_PENDING,
@@ -234,8 +233,8 @@ public class AssetPackInfoController : MonoBehaviour
 
     IEnumerator LoadAssetsFromBundle(AssetBundle assetBundle)
     {
-        string[] bundleAssets = assetBundle.GetAllAssetNames();
-        Queue<string> assetQueue = new Queue<string>(bundleAssets);
+        var bundleAssets = assetBundle.GetAllAssetNames();
+        var assetQueue = new Queue<string>(bundleAssets);
         while (assetQueue.Count > 0)
         {
             string assetName = assetQueue.Dequeue();
@@ -251,7 +250,7 @@ public class AssetPackInfoController : MonoBehaviour
 
     void LoadAssetsFromPack(PlayAssetPackRequest packRequest)
     {
-        List<string> discreteAssets = 
+        var discreteAssets = 
             gameAssetManager.GetDiscreteAssetNameList();
         foreach(string discreteAsset in discreteAssets)
         {
@@ -273,5 +272,4 @@ public class AssetPackInfoController : MonoBehaviour
             }
         }
     }
-#endif // !UNITY_EDITOR
 }
